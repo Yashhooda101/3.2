@@ -1,0 +1,43 @@
+public class Course {
+    public String getCourseName() {
+        return "Java Backend Development";
+    }
+}
+public class Student {
+    private Course course;
+
+    // Constructor Injection
+    public Student(Course course) {
+        this.course = course;
+    }
+
+    public void displayInfo() {
+        System.out.println("Enrolled in: " + course.getCourseName());
+    }
+}
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public Course course() {
+        return new Course();
+    }
+
+    @Bean
+    public Student student() {
+        return new Student(course());
+    }
+}import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class Main {
+    public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        Student student = context.getBean(Student.class);
+        student.displayInfo();
+    }
+}
+
